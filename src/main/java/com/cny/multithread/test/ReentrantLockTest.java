@@ -12,6 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ReentrantLockTest {
 
     public static void main(String[] args) {
+
         //同一个线程可以重复获取到同一把锁
 
         //1.synchronized
