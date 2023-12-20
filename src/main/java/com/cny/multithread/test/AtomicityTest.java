@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class AtomicityTest {
 
-    //共享变量
+    //共享变量 多个线程操作需要加锁
     private static int count = 0;
 
     @SneakyThrows
