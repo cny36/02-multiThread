@@ -70,8 +70,8 @@ public class MyBlockingQueueTest {
         @SneakyThrows
         @Override
         public void run() {
-            for (int i = 0; i < 10; i++) {
-                Thread.sleep(100);
+            for (int i = 0; i < 20; i++) {
+                Thread.sleep(2000);
                 store.put(new Date());
             }
         }
@@ -89,8 +89,8 @@ public class MyBlockingQueueTest {
         @SneakyThrows
         @Override
         public void run() {
-            for (int i = 0; i < 10; i++) {
-                Thread.sleep(120);
+            for (int i = 0; i < 20; i++) {
+                Thread.sleep(100);
                 store.get();
             }
         }
