@@ -13,6 +13,7 @@ public class CountDownLatchTest {
 
     @SneakyThrows
     public static void main(String[] args) {
+
         CountDownLatch countDownLatch = new CountDownLatch(1);
 
         for (int i = 0; i < 10; i++) {
