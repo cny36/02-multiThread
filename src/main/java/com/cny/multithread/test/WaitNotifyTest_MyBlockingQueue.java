@@ -8,10 +8,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * wait和notify机制 实现自定义阻塞队列
+ *
  * @author : chennengyuan
  */
 @Slf4j
-public class MyBlockingQueueTest {
+public class WaitNotifyTest_MyBlockingQueue {
 
 
     public static void main(String[] args) {
@@ -59,7 +61,7 @@ public class MyBlockingQueueTest {
     }
 
 
-    static class Producer extends Thread{
+    static class Producer extends Thread {
 
         private Store store;
 
@@ -78,7 +80,7 @@ public class MyBlockingQueueTest {
     }
 
 
-    static class Consumer extends Thread{
+    static class Consumer extends Thread {
 
         private Store store;
 
