@@ -6,6 +6,7 @@ import java.util.concurrent.locks.LockSupport;
 
 /**
  * LockSupport测试
+ * unpark()可以比park()先执行
  */
 @Slf4j
 public class LockSupportTest {
