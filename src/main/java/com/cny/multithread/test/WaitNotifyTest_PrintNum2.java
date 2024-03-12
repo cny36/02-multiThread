@@ -1,6 +1,10 @@
 package com.cny.multithread.test;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 2个线程交替打印即偶数
@@ -8,43 +12,47 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WaitNotifyTest_PrintNum2 {
 
-    private static Object lock = new Object();
+    private final ReentrantLock lock = new ReentrantLock();
+    private final Condition jiCondition = lock.newCondition();
+    private final Condition ouCondition = lock.newCondition();
 
-    private static int num = 1;
+    private boolean isJi = true;
+
+    @SneakyThrows
+    public void printJI() {
+        for (int i = 1; i<=10000; i += 2) {
+            lock.lock();
+            if (!isJi) {
+                jiCondition.await();
+            }
+            log.info("{}:{}", Thread.currentThread().getName(), i);
+            isJi = false;
+            ouCondition.signal();
+            lock.unlock();
+        }
+    }
+
+
+    @SneakyThrows
+    public void printOU() {
+        for (int i = 2; i<=10000; i += 2) {
+            lock.lock();
+            if (isJi) {
+                ouCondition.await();
+            }
+            log.info("{}:{}", Thread.currentThread().getName(), i);
+            isJi = true;
+            jiCondition.signal();
+            lock.unlock();
+        }
+    }
+
 
     public static void main(String[] args) {
-        new Thread(() -> {
-            while (num < 100) {
-                synchronized (lock) {
-                    if (num % 2 != 0) {
-                        log.info("{}", num);
-                        num++;
-
-                        lock.notify();
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                        }
-                    }
-                }
-            }
-        }, "奇数线程").start();
-
-        new Thread(() -> {
-            while (num <= 100) {
-                synchronized (lock) {
-                    if (num % 2 == 0) {
-                        log.info("{}", num);
-                        num++;
-
-                        lock.notify();
-                        try {
-                            lock.wait();
-                        } catch (InterruptedException e) {
-                        }
-                    }
-                }
-            }
-        }, "偶数线程").start();
+        WaitNotifyTest_PrintNum2 test = new WaitNotifyTest_PrintNum2();
+        new Thread(test::printJI, "奇数-").start();
+        new Thread(test::printOU, "偶数-").start();
     }
+
+
 }
